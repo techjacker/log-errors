@@ -1,6 +1,6 @@
 {
   "name": "log-errors",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "environment aware error logger that can easily be plugged into express.js",
   "main": "index.js",
   "scripts": {
