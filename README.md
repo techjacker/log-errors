@@ -114,13 +114,13 @@ Stack trace:
 #### HTTP Response
 
 If passed a response object then the logger will return this with the response code specified in the error (err.resCode). It defaults to sending a 500 server error with the body {error: 'Error'}.
-
+```JavaScript
 var logErrors   = require('log-errors'),
     logDev      = logErrors.development;
 
   // will call res.send(403, {"error":"random"})
   logDev({resCode:403, name:"random"}, req, res);
-
+```
 
 
 #### Log Levels
