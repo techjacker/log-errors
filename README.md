@@ -2,6 +2,12 @@
 
 [![Build Status](https://secure.travis-ci.org/techjacker/log-errors.png)](http://travis-ci.org/techjacker/log-errors)
 
+- logs errors based on environment
+    - development gets full color-coded errors
+    - production error logs use syslog error headings so they will be picked up by logwatch et al
+    - production only logs serious errors (level 3 and below) to reduce noise
+- request attrs logged if passed request object
+- response returned if passed response object
 
 ## Quickstart
 ```JavaScript
@@ -100,8 +106,22 @@ Stack trace:
 1. error name: (err.name)
 2. error message (err.message)
 3. error logLevel (err.logLevel)
-4. request url (req.url)
-5. request query (req.query)
+4. error responseCode (err.resCode)
+5. request url (req.url)
+6. request query (req.query)
+
+
+#### HTTP Response
+
+If passed a response object then the logger will return this with the response code specified in the error (err.resCode). It defaults to sending a 500 server error with the body {error: 'Error'}.
+
+var logErrors   = require('log-errors'),
+    logDev      = logErrors.development;
+
+  // will call res.send(403, {"error":"random"})
+  logDev({resCode:403, name:"random"}, req, res);
+
+
 
 #### Log Levels
 - Must be one of the 8 unix log levels used in the [Visionmedia Logging Module](https://github.com/visionmedia/log.js).
