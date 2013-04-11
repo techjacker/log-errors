@@ -1,12 +1,12 @@
 {
   "name": "log-errors",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "environment aware error logger that can easily be plugged into express.js",
   "main": "index.js",
   "scripts": {
     "test": "tap ./test"
   },
-  "repository": "",
+  "repository": "git@github.com:techjacker/log-errors.git",
   "keywords": [
     "errors"
   ],
