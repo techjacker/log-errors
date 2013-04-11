@@ -1,5 +1,8 @@
 # Log Errors
 
+[![Build Status](https://secure.travis-ci.org/techjacker/log-errors.png)](http://travis-ci.org/techjacker/log-errors)
+
+
 ## Quickstart
 ```JavaScript
 var	logErrors 	= require('log-errors'),
