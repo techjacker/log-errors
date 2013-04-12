@@ -4,6 +4,7 @@
 
 var test = require('tap').test,
 	main = require('./../lib/main'),
+	LogClass = main.LogClass,
 	prodLogger = main.production,
 	devLogger = main.development;
 
@@ -12,8 +13,8 @@ test('logger shd always return the error', function(t) {
 
 	var randomError = {random: "randomness"};
 
-	t.equal(prodLogger.log(randomError), randomError, 'prod logger shd always return the error');
-	t.equal(devLogger.log(randomError), randomError, 'dev logger shd always return the error');
+	t.equal(prodLogger(randomError), randomError, 'prod logger shd always return the error');
+	t.equal(devLogger(randomError), randomError, 'dev logger shd always return the error');
 
 	t.end();
 });
@@ -26,14 +27,13 @@ test('next shd be called if it is a function and there is no error', function(t)
 		t.ok(true, 'next is called if err is null');
 	};
 
-	prodLogger.log(null, null, null, next);
-	devLogger.log(null, null, null, next);
+	prodLogger(null, null, null, next);
+	devLogger(null, null, null, next);
 });
 
 
 test('environments are set correctly', function(t) {
-
-	t.equal(prodLogger.env, 'production', 'prod logger environment set correctly');
-	t.equal(devLogger.env, 'development', 'dev logger environment set correctly');
+	t.equal((new LogClass('production')).env, 'production', 'prod logger environment set correctly');
+	t.equal((new LogClass('development')).env, 'development', 'dev logger environment set correctly');
 	t.end();
 });
