@@ -1,6 +1,6 @@
 {
   "name": "log-errors",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "environment aware error logger that can easily be plugged into express.js",
   "main": "index.js",
   "scripts": {
@@ -8,6 +8,10 @@
   },
   "repository": "git@github.com:techjacker/log-errors.git",
   "keywords": [
+    "log",
+    "logger",
+    "express logger",
+    "log errors",
     "errors"
   ],
   "author": "andrew griffiths",
