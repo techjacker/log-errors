@@ -11,7 +11,7 @@ test('production logger only logs error levels of 3 (error) and above', function
 	var baseError = new Error('msg');
 
 	// minor errors are NOT logged
-	t.notOk(production(baseError), 'prod logger default log level is "info" > so does not log errors');
+	t.ok(production(baseError), 'prod logger default log level is "error" > DOES not log errors');
 
 	// serious errors are logged
 	baseError.logLevel = 'emergency';
