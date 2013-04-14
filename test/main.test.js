@@ -44,8 +44,11 @@ test('next shd be called if it is a function and there is no error', function(t)
 });
 
 
-test('environments are set correctly', function(t) {
+test('constructor sets class attrs', function(t) {
+	var app = {something: "else"};
 	t.equal((new LogClass('production')).env, 'production', 'prod logger environment set correctly');
 	t.equal((new LogClass('development')).env, 'development', 'dev logger environment set correctly');
+	t.equal((new LogClass('development', app)).app, app, 'app attr set correctly in dev');
+	t.equal((new LogClass('production', app)).app, app, 'app attr set correctly in prod');
 	t.end();
 });
