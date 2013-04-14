@@ -11,24 +11,36 @@ var test = require('tap').test,
 
 test('logger shd always return the error', function(t) {
 
-	var randomError = {random: "randomness"};
+    var randomError = new Error("randomness"),
+        prodErr     = prodLogger(randomError),
+        devErr      = devLogger(randomError);
 
-	t.equal(prodLogger(randomError), randomError, 'prod logger shd always return the error');
-	t.equal(devLogger(randomError), randomError, 'dev logger shd always return the error');
+	t.ok(prodErr instanceof Error, 'prod logger shd always return the error');
+	t.ok(devErr instanceof Error, 'dev logger shd always return the error');
+	t.ok(devErr.logged, 'dev error shd have logged attribute added to it after it has been logged');
+	t.ok(prodErr.logged, 'prod error shd have logged attribute added to it after it has been logged');
 
 	t.end();
 });
 
 test('next shd be called if it is a function and there is no error', function(t) {
 
-	t.plan(2);
+	t.plan(4);
 
-	var	next = function () {
-		t.ok(true, 'next is called if err is null');
-	};
+	var	nextNoErr = function () {
+			t.ok(true, 'next is called if it is a fn and err is null');
+		},
+		nextErrLogged = function () {
+			t.ok(true, 'next is called if it is a fn and err has already been logged');
+		};
 
-	prodLogger(null, null, null, next);
-	devLogger(null, null, null, next);
+	// no error
+	prodLogger(null, null, null, nextNoErr);
+	devLogger(null, null, null, nextNoErr);
+
+	// error already logged
+	prodLogger({logged:true}, null, null, nextErrLogged);
+	devLogger({logged:true}, null, null, nextErrLogged);
 });
 
 
