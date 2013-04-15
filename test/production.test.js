@@ -14,8 +14,8 @@ test('production logger only logs error levels of 3 (error) and above', function
 	var baseError = new Error('msg');
 
 	this.app = new eventEmitter();
-	this.app.on('killApp', function() {
-		t.ok(this.app._events.killApp, 'app event being emitted');
+	this.app.on('seriousError', function() {
+		t.ok(this.app._events.seriousError, 'app event being emitted');
 	}.bind(this));
 
 	// minor errors are NOT logged
