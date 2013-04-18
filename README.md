@@ -10,6 +10,7 @@
 - response returned if passed response object
 
 ## Quickstart
+
 ```JavaScript
 var	logErrors 	= require('log-errors'),
 	logProd 	= logErrors.production,
@@ -23,6 +24,7 @@ try {
 ```
 
 This will output in colored text:
+
 ```Shell
 Error name: Error
 
@@ -49,6 +51,7 @@ Stack trace:
 ### Using in Express.js
 
 It will also log request url + query info.
+
 ```JavaScript
 var	logErrors 	= require('log-errors'),
 	logProd 	= logErrors.production,
@@ -72,6 +75,7 @@ app.configure('development', function() {
 ```
 
 Example Output:
+
 ```Shell
 Error name: Error
 
@@ -114,6 +118,7 @@ Stack trace:
 #### HTTP Response
 
 If passed a response object then the logger will return this with the response code specified in the error (err.resCode). It defaults to sending a 500 server error with the body {error: 'Error'}.
+
 ```JavaScript
 var logErrors   = require('log-errors'),
     logDev      = logErrors.development;
@@ -128,22 +133,48 @@ var logErrors   = require('log-errors'),
 - Defaults to 'info' level if not passed one of the 8 listed.
 
 
+### Base Log Class
+- Production and development loggers inherit from this.
+- If app is an eventEmitter then the 'seriousError' evt will be prodcast when using the productionLogger.
+
+```JavaScript
+var LogClass = function (env, app) {
+    this.env = env;
+    this.app = app;
+};
+```
+
+
 ### Development Logger
-Always prints full error in colored text.
+- Always prints full error in colored text.
+
 ```JavaScript
 var logDev 	= require('log-errors').development;
 logDev(new Error('development error msg'));
 ```
 
 ### Production Logger
-Will only print error info if error.LogLevel is 3 or below, ie ['error', 'critical', 'alert', 'emergency'].
+- Will only print error info if error.LogLevel is 3 or below, ie ['error', 'critical', 'alert', 'emergency']
+
 ```JavaScript
-var logProd	= require('log-errors').production,
-	err 	= newError('some message about the error');
+var logProd = require('log-errors').production,
+    err     = newError('some message about the error');
 
 err.logLevel = 'critical'
 logProd(err);
 ```
+
+
+#### 'seriousError' Evt
+- If error.LogLevel is 3 or below and this.app is an eventEmitter then the 'seriousError' evt will be prodcast when using the productionLogger.
+- It will NOT be broadcast if the error.doNotKill is truthy
+
+```JavaScript
+    if (!err.doNotKill) {
+      appErrorHandler && this.app.emit('seriousError');
+    }
+```
+
 
 ## Using in Conjunction with [Custom Errors npm Module](https://github.com/techjacker/custom-errors)
 
@@ -164,6 +195,7 @@ try {
 ```
 
 Outputs:
+
 ```Shell
 Error name: Validation
 

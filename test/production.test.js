@@ -9,7 +9,7 @@ var test		 = require('tap').test,
 
 test('production logger only logs error levels of 3 (error) and above', function(t) {
 
-	t.plan(7);
+	t.plan(8);
 
 	var baseError = new Error('msg');
 
@@ -29,7 +29,13 @@ test('production logger only logs error levels of 3 (error) and above', function
 	baseError.logLevel = 'error';
 	t.ok(_.isArray(production.call(this, baseError)), 'prod logger does log "error" log level errors');
 
+	// errors with doNotKill flag do not trigger 'seriousError' evt
+	// but ARE logged
+	baseError.doNotKill = true;
+	t.ok(_.isArray(production.call(this, baseError)), 'prod logger does log "error" log level errors');
+
 	// minor errors are NOT logged
+	baseError.doNotKill = undefined;
 	baseError.logLevel = 'info';
 	t.notOk(production.call(this, baseError), 'prod logger does not log "info" log level errors');
 });
