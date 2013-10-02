@@ -1,6 +1,6 @@
 {
   "name": "log-errors",
-  "version": "3.4.2",
+  "version": "4.0.0",
   "license": "BSD",
   "description": "environment aware error logger that can easily be plugged into express.js",
   "tags": [

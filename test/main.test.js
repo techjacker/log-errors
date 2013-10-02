@@ -1,11 +1,8 @@
-/*jslint nomen: true, plusplus: false, sloppy: true, white:true*/
-/*jshint nomen: false, curly: true, plusplus: false, expr:true, undef:true, newcap:true, latedef:true, camelcase:true  */
-/*global module: false, iScroll:false, setTimeout: false, document:false, WebKitCSSMatrix:false, _: false, Backbone: false, backbone: false, $: false, define: false, require: false, console: false, window:false */
-
 var test = require('tap').test,
 	main = require('./../lib/main'),
 	LogClass = main.LogClass,
 	prodLogger = main.production,
+	prodLoggerJsonP = main.productionJsonP,
 	devLogger = main.development;
 
 
@@ -46,9 +43,36 @@ test('next shd be called if it is a function and there is no error', function(t)
 
 test('constructor sets class attrs', function(t) {
 	var app = {something: "else"};
-	t.equal((new LogClass('production')).env, 'production', 'prod logger environment set correctly');
-	t.equal((new LogClass('development')).env, 'development', 'dev logger environment set correctly');
-	t.equal((new LogClass('development', app)).app, app, 'app attr set correctly in dev');
-	t.equal((new LogClass('production', app)).app, app, 'app attr set correctly in prod');
+	t.equal((new LogClass({"env": 'production'})).env, 'production', 'prod logger environment set correctly');
+	t.equal((new LogClass({"env": 'development'})).env, 'development', 'dev logger environment set correctly');
+	t.equal((new LogClass({"env": 'development', "app": app})).app, app, 'app attr set correctly in dev');
+	t.equal((new LogClass({"env": 'production', "app": app})).app, app, 'app attr set correctly in prod');
 	t.end();
+});
+
+
+
+/*--------------------------------------
+jsonP tests
+---------------------------------------*/
+test('handle jsonP', function(t) {
+
+	var errInput = {
+		resCode: 402,
+		name: 'weirdError'
+	},
+	payloadExpected = {
+		resCode: errInput.resCode,
+		error: errInput.name
+	},
+	responseObj = {
+		send: function (resCode, payload) {
+			t.deepEqual(payload, payloadExpected, 'error object returned');
+			t.equal(resCode, 200, 'returns 200 response code');
+			t.end();
+		}
+	};
+
+	prodLoggerJsonP(errInput, {}, responseObj);
+
 });
