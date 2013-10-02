@@ -57,6 +57,7 @@ jsonP tests
 ---------------------------------------*/
 test('handle jsonP', function(t) {
 
+	t.plan(2);
 	var errInput = {
 		resCode: 402,
 		name: 'weirdError'
@@ -66,7 +67,7 @@ test('handle jsonP', function(t) {
 		error: errInput.name
 	},
 	responseObj = {
-		send: function (resCode, payload) {
+		jsonp: function (resCode, payload) {
 			t.deepEqual(payload, payloadExpected, 'error object returned');
 			t.equal(resCode, 200, 'returns 200 response code');
 			t.end();
