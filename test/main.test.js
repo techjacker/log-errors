@@ -27,8 +27,13 @@ test('next shd be called if it is a function and there is no error', function(t)
 	var	nextNoErr = function () {
 			t.ok(true, 'next is called if it is a fn and err is null');
 		},
-		nextErrLogged = function () {
-			t.ok(true, 'next is called if it is a fn and err has already been logged');
+		response = {
+			send: function () {
+				t.ok(true, 'next is called if it is a fn and err has already been logged');
+			},
+			jsonP: function () {
+				t.ok(true, 'next is called if it is a fn and err has already been logged');
+			}
 		};
 
 	// no error
@@ -36,8 +41,8 @@ test('next shd be called if it is a function and there is no error', function(t)
 	devLogger(null, null, null, nextNoErr);
 
 	// error already logged
-	prodLogger({logged:true}, null, null, nextErrLogged);
-	devLogger({logged:true}, null, null, nextErrLogged);
+	prodLogger({logged:true}, null, response, null);
+	devLogger({logged:true}, null, response, null);
 });
 
 
